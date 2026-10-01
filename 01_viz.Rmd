@@ -1,0 +1,127 @@
+---
+title: "Visualization"
+author: "Sameera"
+date: "2026-10-01"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggridges)
+
+library(p8105.datasets)
+data("weather_df")
+```
+
+Scatterplot
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y= tmax))
+```
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y= tmax)) +
+  geom_point()
+```
+
+Another way to do it where u put the dataframe first and 
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+Making it fancier
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, colour = name)) +
+  geom_point(alpha = .25) ##for blending
+```
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, colour = name)) +
+  geom_point(alpha = .25) + ##for blending
+  geom_smooth(se = FALSE) ## gives smooth curve and se false removes standard error shading
+```
+
+where u defind your aesthetic matters
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point(aes(colour = name), alpha = .25) + ##for blending
+  geom_smooth(se = FALSE) ## gives smooth curve and se false removes standard error shading
+```
+
+Show faceting
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y= tmax, colour = name)) +
+  geom_point(alpha = .5) +
+  facet_grid(. ~ name) ##separates the diff graphs 
+```
+by column or row depending on where u put the dot
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y= tmax, colour = name)) +
+  geom_point(alpha = .5) +
+  facet_grid(name ~ .) ##separates the diff graphs 
+```
+
+another way to do it
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y= tmax, colour = name)) +
+  geom_point(alpha = .5) +
+  facet_grid(cols = vars(name)) ##separates the diff graphs 
+```
+
+Moving on from temp
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = date, y = tmax, colour = name)) +
+  geom_point(aes(size = prcp, alpha = .5)) + ## changes point size based on precipitation
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ name)
+```
+
+plot only central park tmin and tmax and convert temp to fahrenheit
+
+```{r}
+weather_df |> 
+  filter(name == "CentralPark_NY") |> 
+  mutate(tminf = tmin * 1.8 + 32, 
+         tmaxf = tmax * 1.8 + 32) |> 
+  ggplot(aes(x = tminf, y = tmaxf)) +
+  geom_point()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
