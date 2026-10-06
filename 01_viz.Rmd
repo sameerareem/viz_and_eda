@@ -180,6 +180,7 @@ ggsave("images/ggp_weater.pdf", ggp_weather)
 ```
 
 ```{r fig.width = 12, fig.height = 12}
+## change image size
 weather_df |> 
   ggplot(aes(x = tmin, y = tmax)) +
   geom_point()

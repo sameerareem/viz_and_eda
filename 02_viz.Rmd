@@ -1,0 +1,78 @@
+---
+title: "Visualization"
+author: "Sameera"
+date: "2026-10-01"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(p8105.datasets)
+data("weather_df")
+```
+
+start w scatterplot
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmax, y= tmin, colour = name)) +
+  geom_point() +
+  labs(
+    title = "Temperature (Max vs Min)",
+    x = "Max Temperature (C)",
+    y = "Min Temperature (C)",
+    color = "Location",
+    caption = "Data from NOAA for three weather stations"
+  ) +
+  
+  scale_x_continuous(
+    breaks = c(-10, 0, 15),
+    labels = c("-10 C", "0", "Fifteen")
+  ) +
+  scale_y_continuous(
+    trans = "sqrt",
+    position = "right"
+  )
+```
+
+Color
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmax, y = tmin, color = name)) +
+  geom_point() +
+  scale_colour_hue(h = c(500, 950))
+```
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmax, y = tmin, color = name)) +
+  geom_point() +
+  viridis::scale_colour_viridis(
+    name = "Location",
+    discrete = TRUE
+  )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
