@@ -1,7 +1,7 @@
 ---
-title: "Visualization"
+title: "Visualization 2"
 author: "Sameera"
-date: "2026-10-01"
+date: "2026-10-06"
 output: github_document
 ---
 
@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(p8105.datasets)
+library(patchwork)
 data("weather_df")
 ```
 
@@ -59,9 +60,81 @@ weather_df |>
   )
 ```
 
+## Themes
 
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, colour = name)) +
+  geom_point() +
+  viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE
+  ) +
+  theme_classic()
+  theme(legend.position = "bottom")
+```
 
+update tmax vs date plot
 
+```{r}
+weather_df |> 
+  ggplot(aes(x = date, y = tmax, colour = name)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "Seasonal trends in Max Temp",
+    x = "Date",
+    y = "Max Temp",
+    caption = "Max daily temp in three weather stations in 2021 and 2020",
+    color = "Location"
+  ) +
+  viridis::scale_color_viridis(
+    discrete = TRUE
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+## Two more useful plot things
+
+```{r}
+central_park_df =
+  weather_df |> 
+  filter(name == "CentralPark_NY")
+
+molokai_df =
+  weather_df |> 
+  filter(name == "Molokai_HI")
+
+ggplot(molokai_df, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = central_park_df)
+```
+
+## Multiple panels w diff plot types
+
+```{r}
+ggp_tmax_tmin =
+  weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point() +
+  theme(legend.position = "none")
+
+ggp_prcp_density = 
+  weather_df |> 
+  filter(prcp > 0) |> 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5) +
+  theme(legend.position = "none")
+
+ggp_seasonal =
+  weather_df |> 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  theme(legend.position = "bottom")
+
+(ggp_tmax_tmin + ggp_prcp_density) / ggp_seasonal
+```
 
 
 
